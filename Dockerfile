@@ -29,12 +29,7 @@ RUN mkdir -p /binaries && stack install --local-bin-path=/binaries/
 FROM centos:8
 
 # Documentation
-ENV DFILE_VERSION "1.0"
-
-# Create Lovelace User
-RUN groupadd cardano --gid 1024
-RUN adduser lovelace -u 1023 --no-create-home
-RUN usermod -a -G cardano lovelace
+ENV DFILE_VERSION "1.1"
 
 # Documentation
 LABEL maintainer="Kevin Haller <keivn.haller@outofbits.com>"
@@ -43,8 +38,5 @@ LABEL description="Blockchain node for Cardano (implemented in Haskell)."
 
 COPY --from=compiler /binaries/cardano-node /usr/local/bin/
 COPY --from=compiler /binaries/cardano-cli /usr/local/bin/
-
-# Choose Lovelace as user to run jormungandr
-USER lovelace
 
 ENTRYPOINT ["cardano-node"]
