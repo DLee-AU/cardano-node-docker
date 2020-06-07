@@ -1,19 +1,25 @@
 # Compiler Image
+# --------------------------------------------------------------------------
 FROM centos:8 AS compiler
 
-# Created with help by Mark Stopka (https://github.com/2nd-Layer/docker-hub-cardano-images/blob/master/cardano-node/1.6.0/Dockerfile)
-
 # install dependencies
-RUN dnf install -y git openssl-devel systemd-devel zlib-devel
+RUN dnf update -y
+RUN dnf install git gcc gcc-c++ gmp-devel make tar wget zlib-devel -y
+RUN dnf install systemd-devel ncurses-devel ncurses-compat-libs -y
 
-# ugly workaround for vty-5.25.1
-RUN ln -s /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so
+# get cabal
+ADD https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz cabal-install.tar.xz
+RUN tar -xf cabal-install.tar.xz && rm cabal-install.tar.xz cabal.sig
+RUN mv cabal /usr/local/bin
 
-# install stack
-ADD https://get.haskellstack.org/ stack_setup.sh
-RUN sh stack_setup.sh && rm -f stack_setup.sh
+RUN cabal update
 
-# build cardano-node
+# install ghc
+ADD https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-centos7-linux.tar.xz ghc.tar.xz
+RUN tar -xf ghc.tar.xz
+RUN cd ghc-8.6.5 && ./configure && make install
+
+# clone cardano-node
 ARG NODE_VERSION
 ARG NODE_REPOSITORY
 ARG NODE_BRANCH
@@ -23,13 +29,17 @@ WORKDIR cardano-node
 RUN git fetch && git fetch --tags
 RUN git checkout $NODE_VERSION
 RUN git submodule update
-RUN mkdir -p /binaries && stack install --local-bin-path=/binaries/
+
+# compile
+RUN cabal build all
+RUN mkdir -p /binaries && mv {cardano-node,cardano-cli} /binaries/
 
 # Main Image
+# -------------------------------------------------------------------------
 FROM centos:8
 
 # Documentation
-ENV DFILE_VERSION "1.1"
+ENV DFILE_VERSION "1.2"
 
 # Documentation
 LABEL maintainer="Kevin Haller <keivn.haller@outofbits.com>"
