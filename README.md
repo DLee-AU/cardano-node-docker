@@ -1,4 +1,4 @@
-# Cardano Node
+# Cardano Node Dockerfile
 
 This repository maintains an unofficial Dockerfile for the [cardano-node](https://github.com/input-output-hk/cardano-node)
 software based on CentOS 8. It follows the [guide](https://github.com/input-output-hk/cardano-tutorials/blob/master/node-setup/000_install.md)
