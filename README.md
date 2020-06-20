@@ -11,11 +11,10 @@ In order to build the image in this repository, the arguments below have to be s
 | Argument | Description |
 | --- | --- |
 | NODE_VERSION | version of the cardano-node for which the image shall be built |
-| NODE_REPOSITORY | respoisotry from which the source code shall be fetched |
+| NODE_REPOSITORY | repository from which the source code shall be fetched |
 | NODE_BRANCH | branch of the repository that shall be checked out |
 
-We can build version `1.13.0` of the cardano-node in the original [repository](https://github.com/input-output-hk/cardano-node)
-with the following command.
+We can build version `1.13.0` of the cardano-node in the original [repository](https://github.com/input-output-hk/cardano-node) with the following command.
 
 ```
 docker build --build-arg NODE_VERSION=1.13.0 --build-arg NODE_BRANCH=master \
