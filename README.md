@@ -50,7 +50,7 @@ The Docker documentation is a good starting point for understanding the differen
 
 1. Create a data directory on a suitable volume on your host system, e.g. `/my/own/cardano-node/data`.
 2. Start your cardano-node container like this, depending  : 
-    `docker run -v /my/own/cardano-node/data:/data adalove/cardano-node:tag` --database-path /data ...`
+    `docker run -v /my/own/cardano-node/data:/data adalove/cardano-node:tag --database-path /data ...`
 
 Note that users on host systems with SELinux enabled may see issues with this. The current workaround is to assign the relevant SELinux policy type to the new data directory so that the container will be allowed to access it:
 
