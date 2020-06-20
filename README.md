@@ -49,7 +49,7 @@ There are several ways to store data used by applications that run in Docker con
 The Docker documentation is a good starting point for understanding the different storage options and variations, and there are multiple blogs and forum postings that discuss and give advice in this area. We will simply show the basic procedure here for the latter option above:
 
 1. Create a data directory on a suitable volume on your host system, e.g. `/my/own/cardano-node/data`.
-2. Start your cardano-node container like this, depending  : 
+2. Start your cardano-node container like this, depending on how you have specified the database path: 
     `docker run -v /my/own/cardano-node/data:/data adalove/cardano-node:tag --database-path /data ...`
 
 Note that users on host systems with SELinux enabled may see issues with this. The current workaround is to assign the relevant SELinux policy type to the new data directory so that the container will be allowed to access it:
