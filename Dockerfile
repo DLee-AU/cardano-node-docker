@@ -31,11 +31,11 @@ RUN git checkout $NODE_VERSION
 RUN git submodule update
 
 # compile
-RUN mkdir -p /binaries
-RUN cabal build --bindir /binaries all
-# deal with ignored bin directory command
-RUN cp -L "/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-${NODE_VERSION}/x/cardano-cli/build/cardano-cli/cardano-cli" /binaries
-RUN cp -L "/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-${NODE_VERSION}/x/cardano-node/build/cardano-node/cardano-node" /binaries
+RUN mkdir -p /binaries/
+RUN cabal build all --symlink-bindir=/binaries/
+# deal with ignored bin directory argument
+RUN cp -L "/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-${NODE_VERSION}/x/cardano-cli/build/cardano-cli/cardano-cli" /binaries/
+RUN cp -L "/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-${NODE_VERSION}/x/cardano-node/build/cardano-node/cardano-node" /binaries/
 
 # Main Image
 # -------------------------------------------------------------------------
