@@ -21,7 +21,7 @@ RUN rm -rf ghc-${GHC_VERSION} ghc.tar.xz
 
 # Documentation
 LABEL maintainer="Kevin Haller <keivn.haller@outofbits.com>"
-LABEL version="ghc${GHC_VERSION}-c${CABAL_VERSION}"
+LABEL version="8-ghc${GHC_VERSION}-c${CABAL_VERSION}"
 LABEL description="CentOS 8 Image ready to compile the Cardano Node."
 
 
