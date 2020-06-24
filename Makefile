@@ -1,4 +1,7 @@
-latest: 1.13.0
+latest: 1.14.0
+
+1.14.0:
+	./build.sh "1.14.0"
 
 1.13.0-rewards:
 	./build.sh "1.13.0-rewards"
@@ -38,3 +41,9 @@ latest: 1.13.0
 
 1.6.0:
 	./build.sh "1.6.0"
+
+base-image:
+	./build-base.sh
+
+base-compile-image: base-image 
+	./build-base-compiler.sh "8.6.5" "3.2.0.0"
