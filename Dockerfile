@@ -8,7 +8,6 @@ RUN dnf install git gcc gcc-c++ gmp-devel make tar wget zlib-devel -y
 RUN dnf install systemd-devel libtool ncurses-devel ncurses-compat-libs pkg-config -y
 
 ## libsodium
-#RUN echo "/usr/local/lib" > /etc/ld.so.conf
 RUN git clone -b "draft-irtf-cfrg-vrf-03" https://github.com/input-output-hk/libsodium.git
 
 WORKDIR libsodium
@@ -18,7 +17,6 @@ RUN ./autogen.sh
 RUN ./configure
 RUN make && make check
 RUN make install
-#RUN ldconfig -v
 
 # get cabal
 WORKDIR /
@@ -51,10 +49,8 @@ RUN git submodule update
 RUN mkdir -p /binaries/
 RUN export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" && \
 	export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" && \
-	cabal build all
-# move binaries
-RUN cp -L "/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-${NODE_VERSION}/x/cardano-cli/build/cardano-cli/cardano-cli" /binaries/
-RUN cp -L "/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-${NODE_VERSION}/x/cardano-node/build/cardano-node/cardano-node" /binaries/
+	cabal install cardano-node cardano-cli --installdir=/binaries/ \
+		--install-method=copy
 
 # Main Image
 # -------------------------------------------------------------------------
