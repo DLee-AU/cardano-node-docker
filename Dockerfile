@@ -14,18 +14,33 @@ WORKDIR cardano-node
 RUN git fetch --all --tags
 RUN git checkout tags/$NODE_VERSION --quiet
 
-RUn echo -e "package cardano-crypto-praos\n  flags: -external-libsodium-vrf" > cabal.project.local
+RUN mkdir -p /binaries/
+RUN cabal build all
+# move binaries
+RUN cp -L "/libsodium/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-${NODE_VERSION}/x/cardano-cli/build/cardano-cli/cardano-cli" /binaries/
+RUN cp -L "/libsodium//cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-${NODE_VERSION}/x/cardano-node/build/cardano-node/cardano-node" /binaries/
+
+# Compiler for the health check program written in Go
+# -------------------------------------------------------------------------
+FROM golang:1.15 AS healthCheckCompiler
+
+COPY healthcheck healthcheck
+WORKDIR healthcheck
 
 RUN mkdir -p /binaries/
-RUN cabal install cardano-node cardano-cli --installdir=/binaries/ \
-		--install-method=copy
+RUN go mod vendor && go build
+RUN mv healthcheck /binaries/
 
-# Main Image
+# Main Image (see Base.Dockerfile for base image)
 # -------------------------------------------------------------------------
 FROM adalove/centos:8
 
 # Documentation
-ENV DFILE_VERSION "1.3"
+ENV DFILE_VERSION "1.5"
+
+# Add Lovelace user
+RUN groupadd --gid 1402 cardano
+RUN useradd -m --uid 1402 --gid 1402 lovelace
 
 # Documentation
 LABEL maintainer="Kevin Haller <keivn.haller@outofbits.com>"
@@ -34,5 +49,8 @@ LABEL description="Blockchain node for Cardano (implemented in Haskell)."
 
 COPY --from=compiler /binaries/cardano-node /usr/local/bin/
 COPY --from=compiler /binaries/cardano-cli /usr/local/bin/
+COPY --from=healthCheckCompiler /binaries/healthcheck /usr/local/bin/
+
+USER lovelace
 
 ENTRYPOINT ["cardano-node"]

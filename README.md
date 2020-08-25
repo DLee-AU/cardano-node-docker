@@ -14,27 +14,41 @@ In order to build the image in this repository, the arguments below have to be s
 | NODE_REPOSITORY | repository from which the source code shall be fetched |
 | NODE_BRANCH | branch of the repository that shall be checked out |
 
-We can build version `1.13.0` of the cardano-node in the original [repository](https://github.com/input-output-hk/cardano-node) with the following command.
+We can build version `1.19.0` of the cardano-node in the original [repository](https://github.com/input-output-hk/cardano-node) with the following command.
 
 ```
-docker build --build-arg NODE_VERSION=1.13.0 --build-arg NODE_BRANCH=master \
+docker build --build-arg NODE_VERSION=1.19.0 --build-arg NODE_BRANCH=master \
   --build-arg NODE_REPOSITORY="https://github.com/input-output-hk/cardano-node" .
 ```
 
 ## Running
 
-The image contains the cardano-node as well as the cardano-cli executable. The default entrypoint points to the cardano-node
-executable. 
+The image contains the cardano-node as well as the cardano-cli executable. The default entrypoint points to the cardano-node executable. 
 
 ### Cardano Node
 ```
-docker run adalove/cardano-node:1.2-1.13.0 --help
+docker run adalove/cardano-node:1.5-1.19.0 --help
+```
+
+#### Healthcheck
+
+The image contains a small Go program for checking the health of a cardano-node. The program gathers information from the Prometheus endpoint of the node and concludes whether it is healthy based on specified
+thresholds.
+
+|         Argument           |          Expected Value           |   Description  |
+|--------------------------- | --------------------------------- | -------------- |
+| -max-time-since-last-block | duration (e.g. 5m for 5 minutes)  | specifies how long a `cardano-node` can be inable to fetch the most recently minted block |
+
+
+Example:
+```
+	healthcheck -max-time-since-last-block 5m
 ```
 
 ### Cardano CLI
 
 ```
-docker run --entrypoint "cardano-cli" adalove/cardano-node:1.2-1.13.0 --help
+docker run --entrypoint "cardano-cli" adalove/cardano-node:1.5-1.19.0 --help
 ```
 
 ## Where to store your data?

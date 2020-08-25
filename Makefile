@@ -1,4 +1,25 @@
-latest: 1.14.0
+latest: 1.19.0
+
+1.19.0:
+	./build.sh "1.19.0"	
+
+1.18.1:
+	./build.sh "1.18.1"	
+
+1.18.0:
+	./build.sh "1.18.0"	
+
+1.17.0:
+	./build.sh "1.17.0"	
+
+1.16.0:
+	./build.sh "1.16.0"	
+
+1.15.1:
+	./build.sh "1.15.1"	
+
+1.14.1:
+	./build.sh "1.14.1"
 
 1.14.0:
 	./build.sh "1.14.0"
@@ -45,5 +66,5 @@ latest: 1.14.0
 base-image:
 	./build-base.sh
 
-base-compile-image: base-image 
+base-compile-image: #base-image 
 	./build-base-compiler.sh "8.6.5" "3.2.0.0"

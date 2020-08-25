@@ -1,0 +1,5 @@
+examples/
+vendor/
+.idea/
+*.iml
+healthcheck

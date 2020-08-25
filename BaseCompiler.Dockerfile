@@ -1,6 +1,13 @@
 FROM adalove/centos:8
 
-RUN dnf install git gcc gcc-c++ gmp-devel make zlib-devel systemd-devel libsodium-devel ncurses-devel ncurses-compat-libs -y
+# install dependencies for cardano-node compilation
+RUN dnf install -y gcc-c++ \
+	gmp-devel \
+	ncurses-compat-libs \
+	ncurses-devel \
+	zlib-devel \
+	systemd-devel \
+	&& dnf clean all
 
 # install cabal v3.2.0
 ARG CABAL_VERSION

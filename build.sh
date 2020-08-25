@@ -1,5 +1,5 @@
 #!/bin/bash
-DFILE_VERSION=1.3
+DFILE_VERSION=1.5
 
 docker build --build-arg NODE_VERSION=$1 \
            --build-arg NODE_REPOSITORY="https://github.com/input-output-hk/cardano-node" \
