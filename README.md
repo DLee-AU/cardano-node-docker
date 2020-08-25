@@ -42,7 +42,7 @@ thresholds.
 
 Example:
 ```
-	healthcheck -max-time-since-last-block 5m
+healthcheck -max-time-since-last-block 5m
 ```
 
 ### Cardano CLI
